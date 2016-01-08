@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="64" tileheight="64" nextobjectid="15">
+ <tileset firstgid="1" name="cobbleset-64_0" tilewidth="64" tileheight="64" tilecount="64" columns="8">
+  <image source="cobbleset-64_0.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Laeyer 1" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAM8A8jTA3/oIcLNcOJFLNoYS8yIEUPreKK2maju5nWfhgMGADjgQya
+  </data>
+ </layer>
+ <layer name="Main" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFMKBFJTO08PDRgQoSJtVsaqkl1ixkDAMqDNj9gE0tNkCMv/G5iRT96G6UwGGmFg4+OoDpJzb+kNWqYLGfVCDBgBn+pGAFIAYAAUUI9w==
+  </data>
+ </layer>
+ <objectgroup name="Markers">
+  <object id="14" name="Player" x="287" y="599" width="64" height="64"/>
+ </objectgroup>
+</map>
