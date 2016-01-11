@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="64" tileheight="64" nextobjectid="15">
+ <tileset firstgid="1" name="cobbleset-64_0" tilewidth="64" tileheight="64" tilecount="64" columns="8">
+  <image source="cobbleset-64_0.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Laeyer 1" width="32" height="16" offsetx="-4" offsety="-1">
+  <data encoding="base64" compression="zlib">
+   eJzjZ2Bg4EfCKkiYn8aYgQ52jNo/av9gtX8Uj+JRPIoHEgMACjQd5g==
+  </data>
+ </layer>
+ <layer name="Main" width="32" height="16">
+  <data encoding="base64" compression="zlib">
+   eJzTYGBg0BgAzAWlBxKoDDL7VdDEVNAwOearYGHjsp/egJD9uMKDXvaTaya6m+lpPylgMNiPK41rIWEuJIwrHZObPwYSDEb7QWLo4U2u2YTywWD0P73tJ4Q5GVDjg1hMyFyYGgA9zQ7G
+  </data>
+ </layer>
+ <objectgroup name="Markers">
+  <object id="14" name="Player" x="64" y="678.667" width="24" height="25.3333"/>
+ </objectgroup>
+ <layer name="Obstacles" width="32" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBh5wBqKR8EoIATQ08louhkFo4B4MJzKWnx+IcWfgylMADW1AsU=
+  </data>
+ </layer>
+</map>

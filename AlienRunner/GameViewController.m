@@ -7,7 +7,7 @@
 //
 
 #import "GameViewController.h"
-#import "GameScene.h"
+#import "MainMenuScene.h"
 
 @implementation SKScene (Unarchive)
 
@@ -27,7 +27,7 @@
         skView.showsFPS = YES;
         skView.showsNodeCount = YES;
         // Create and configure the scene.
-        SKScene * scene = [GameScene sceneWithSize:skView.bounds.size];
+        SKScene * scene = [MainMenuScene sceneWithSize:skView.bounds.size];
         scene.scaleMode = SKSceneScaleModeAspectFill;
         // Present the scene.
         [skView presentScene:scene];

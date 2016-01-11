@@ -9,6 +9,7 @@
 #import "GameScene.h"
 #import "JSTileMap.h"
 #import "Player.h"
+#import "MainMenuScene.h"
 
 @interface GameScene ()
 
@@ -16,6 +17,7 @@
 @property (nonatomic) TMXLayer *mainLayer;
 @property (nonatomic) SKNode *cameraTest;
 @property (nonatomic) Player *player;
+@property (nonatomic) TMXLayer *obstacleLayer;
 
 @end
 
@@ -29,8 +31,9 @@
         self.backgroundColor = [SKColor colorWithRed:0.81 green:0.91 blue:0.96 alpha:1.0];
         
         // Load level.
-        self.map = [JSTileMap mapNamed:@"Level1.tmx"];
+        self.map = [JSTileMap mapNamed:@"Level2.tmx"];
         self.mainLayer = [self.map layerNamed:@"Main"];
+        self.obstacleLayer = [self.map layerNamed:@"Obstacles"];
         [self addChild:self.map];
         
         // Setup camera.
@@ -41,7 +44,6 @@
         
         // Setup Player.
         self.player = [[Player alloc] init];
-        //[self.player setScale:0.7];
         self.player.position = [self getMarkerPosition:@"Player"];
         
         [self.map addChild:self.player];
@@ -86,23 +88,31 @@
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    UITouch *touch = [touches anyObject];
+    if ([touch locationInNode:self].x < 50) {
+        [self gameOver];
+    }
     self.player.didJump = NO;
 }
+
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     self.player.didJump = NO;
 }
 
--(void)collide:(Player*)player withLayer:(TMXLayer*)layer
+-(BOOL)collide:(Player*)player withLayer:(TMXLayer*)layer resolveWithMove:(BOOL)movePlayer
 {
     // Create coordinate offsets for tiles to check.
     CGPoint coodOffsets[8] = {CGPointMake(0, 1), CGPointMake(0, -1), CGPointMake(1, 0), CGPointMake(-1, 0),
         CGPointMake(1, -1), CGPointMake(-1, -1), CGPointMake(1, 1), CGPointMake(-1, 1)};
     // Get tile grid coord for player's position.
     CGPoint playerCoord = [layer coordForPoint:player.targetPosition];
+    BOOL collision = NO;
     
-    // Set on ground to no by default
-    player.onGround = NO;
+    if (movePlayer) {
+        // Set on ground to no by default
+        player.onGround = NO;
+    }
     
     // Loop through the tiles surrounding tile at player's location
     for (int i = 0; i < 8; i++) {
@@ -122,6 +132,10 @@
             CGRect intersection = CGRectIntersection(playerRect, [self rectForTileCoord:tileCoord]);
             
             if (!CGRectIsEmpty(intersection)) {
+                // We have a collision
+                collision = YES;
+                if (movePlayer) {
+                    // Do we move the player horizontally or vertically?
                 // Do we move the player horizontally or vertically?
                 BOOL resolveVertically = offset.x == 0 || (offset.y != 0 && intersection.size.height < intersection.size.width);
                 CGPoint positionAdjustment = CGPointZero;
@@ -132,7 +146,7 @@
                     // Stop player moving vertically.
                     player.velocity = CGVectorMake(player.velocity.dx, 0);
                     
-                    if (offset.y == 1) {
+                    if (offset.y == player.gravityMultiplier) {
                         // Player is touching the ground.
                         player.onGround = YES;
                     }
@@ -145,11 +159,15 @@
                 }
                 player.targetPosition = CGPointMake(player.targetPosition.x + positionAdjustment.x,
                                                     player.targetPosition.y + positionAdjustment.y);
+                } else {
+                    // We've encountered a collision but don't need to move, so no point continuing.
+                    return YES;
+                }
             }
         }
     }
     
-    
+    return collision;
 }
 
 -(BOOL)validTileCoord:(CGPoint)tileCoord
@@ -173,16 +191,28 @@
     // Update player.
     [self.player update];
     
-    // Collide player with world.
-    [self collide:self.player withLayer:self.mainLayer];
-    
-    // Move player.
-    self.player.position = self.player.targetPosition;
+    // Check if the player has fallen out of the world.
+    if (self.player.targetPosition.y < -self.player.size.height * 2 ||
+        self.player.targetPosition.y > (self.map.mapSize.height * self.map.tileSize.height) + self.player.size.height * 2) {
+        // Fallen outside the world.
+        [self gameOver];
+    } else {
+        if (self.player.state != Hurt) {
+            // Collide player with world.
+            [self collide:self.player withLayer:self.mainLayer resolveWithMove:YES];
+            // Collide with obstacles.
+            BOOL collision = [self collide:self.player withLayer:self.obstacleLayer resolveWithMove:NO];
+            if (collision) {
+                [self.player kill];
+            }
+        }
+        // Move player.
+        self.player.position = self.player.targetPosition;
+    }
     
     // Update position of camera.
     self.cameraTest.position = CGPointMake(self.player.position.x + (self.size.width * 0.25), self.player.position.y);
     [self updateView];
-    
 }
 
 -(void)updateView
@@ -209,4 +239,10 @@
     }
     return position;
 }
+
+-(void)gameOver
+{
+    [self.view presentScene:[[MainMenuScene alloc] initWithSize:self.size]];
+}
+
 @end
