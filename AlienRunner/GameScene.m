@@ -10,6 +10,7 @@
 #import "JSTileMap.h"
 #import "Player.h"
 #import "MainMenuScene.h"
+#import "Constants.h"
 
 @interface GameScene ()
 
@@ -88,10 +89,6 @@
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = [touches anyObject];
-    if ([touch locationInNode:self].x < 50) {
-        [self gameOver];
-    }
     self.player.didJump = NO;
 }
 
@@ -195,7 +192,7 @@
     if (self.player.targetPosition.y < -self.player.size.height * 2 ||
         self.player.targetPosition.y > (self.map.mapSize.height * self.map.tileSize.height) + self.player.size.height * 2) {
         // Fallen outside the world.
-        [self gameOver];
+        [self gameOver:NO];
     } else {
         if (self.player.state != Hurt) {
             // Collide player with world.
@@ -208,6 +205,12 @@
         }
         // Move player.
         self.player.position = self.player.targetPosition;
+        
+        // Check if the player has completed the level.
+        if (self.player.position.x - self.player.size.width > self.map.mapSize.width * self.map.tileSize.width) {
+            // Reached end of the level.
+            [self gameOver:YES];
+        }
     }
     
     // Update position of camera.
@@ -240,8 +243,22 @@
     return position;
 }
 
--(void)gameOver
+-(void)gameOver:(BOOL)completedLevel
 {
+    if (completedLevel) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSInteger selectedLevel = [userDefaults integerForKey:kARSelectedLevel];
+        NSInteger highestUnlockedLevel = [userDefaults integerForKey:kARHighestUnlockedLevel];
+        if (selectedLevel == highestUnlockedLevel && kARHighestLevel > highestUnlockedLevel) {
+            highestUnlockedLevel++;
+            [userDefaults setInteger:highestUnlockedLevel forKey:kARHighestUnlockedLevel];
+        }
+        if (selectedLevel < highestUnlockedLevel) {
+            selectedLevel++;
+            [userDefaults setInteger:selectedLevel forKey:kARSelectedLevel];
+        }
+        [userDefaults synchronize];
+    }
     [self.view presentScene:[[MainMenuScene alloc] initWithSize:self.size]];
 }
 

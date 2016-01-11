@@ -5,12 +5,12 @@
  </tileset>
  <layer name="Laeyer 1" width="32" height="16" offsetx="-4" offsety="-1">
   <data encoding="base64" compression="zlib">
-   eJzjZ2Bg4EfCKkiYn8aYgQ52jNo/av9gtX8Uj+JRPIoHEgMACjQd5g==
+   eJzjZ2Bg4EfCKkiYn8aYgQ52DGY80P4ftX/g08AoHsWjeBQPFAYAc3Ad9Q==
   </data>
  </layer>
  <layer name="Main" width="32" height="16">
   <data encoding="base64" compression="zlib">
-   eJzTYGBg0BgAzAWlBxKoDDL7VdDEVNAwOearYGHjsp/egJD9uMKDXvaTaya6m+lpPylgMNiPK41rIWEuJIwrHZObPwYSDEb7QWLo4U2u2YTywWD0P73tJ4Q5GVDjg1hMyFyYGgA9zQ7G
+   eJzTYGBg0BgAzAWlRzJQwcJXwcJHFyfFfBUsbFz20xsQsh9XeNDLfnLNRHczPe0nBQwG+3GlcS0kzIWEcaVjcvPHQILBaD9IDD28yTWbUD4YaP8PBoAtDyBjTgbU+CAWEzIXpgYACg4OWg==
   </data>
  </layer>
  <objectgroup name="Markers">
@@ -18,7 +18,7 @@
  </objectgroup>
  <layer name="Obstacles" width="32" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYBh5wBqKR8EoIATQ08louhkFo4B4MJzKWnx+IcWfgylMADW1AsU=
+   eJxjYBgFo2AU4ALWBPijYBSMAtzAmmF45RlcfhmqfgQAXOkBYw==
   </data>
  </layer>
 </map>

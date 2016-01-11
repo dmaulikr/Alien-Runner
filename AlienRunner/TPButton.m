@@ -20,7 +20,14 @@
 
 +(instancetype)spriteNodeWithTexture:(SKTexture *)texture
 {
+    return [TPButton spriteNodeWithTexture:texture andDisabledTexture:nil];
+}
+
++(instancetype)spriteNodeWithTexture:(SKTexture *)texture andDisabledTexture:(SKTexture*)disabledTexture
+{
     TPButton *instance = [super spriteNodeWithTexture:texture];
+    instance.enabledTexture = texture;
+    instance.disabledTexture = disabledTexture;
     instance.pressedScale = 0.9;
     instance.userInteractionEnabled = YES;
     return instance;
@@ -30,6 +37,19 @@
 {
     _pressedTarget = pressedTarget;
     _pressedAction = pressedAction;
+}
+
+-(void)setDisabled:(BOOL)disabled
+{
+    if (_disabled != disabled) {
+        _disabled = disabled;
+        if (_disabled ) {
+            self.texture = self.disabledTexture;
+        } else {
+            self.texture = self.disabledTexture;
+        }
+        self.userInteractionEnabled = !_disabled;
+    }
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -61,6 +81,9 @@
         if (CGRectContainsPoint(self.fullSizeFrame, [touch locationInNode:self.parent])) {
             // Pressed button.
             ((void(*)(id, SEL))objc_msgSend)(self.pressedTarget, self.pressedAction);
+            if (self.delegate) {
+                [self.delegate buttonPressed:self];
+            }
         }
     }
 }

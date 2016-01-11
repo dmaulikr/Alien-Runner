@@ -11,6 +11,7 @@
 #import "TPButton.h"
 #import "GameScene.h"
 #import "LevelSelection.h"
+#import "Constants.h"
 
 @implementation MainMenuScene
 
@@ -36,8 +37,9 @@
         [self addChild:alien];
         
         // Create label node to display level.
+        NSInteger selectedLevel = [[NSUserDefaults standardUserDefaults] integerForKey:kARSelectedLevel];
         SKLabelNode *levelDisplay = [SKLabelNode labelNodeWithFontNamed:@"Futura"];
-        levelDisplay.text = @"Level 1";
+        levelDisplay.text = [NSString stringWithFormat:@"Level %d", (int)selectedLevel];
         levelDisplay.fontColor = [SKColor colorWithRed:0.518 green:0.78 blue:1.0 alpha:1.0];
         levelDisplay.fontSize = 15;
         levelDisplay.position = CGPointMake(size.width * 0.5, size.height - 295);

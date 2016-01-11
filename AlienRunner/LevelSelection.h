@@ -7,7 +7,9 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "TPButton.h"
 
-@interface LevelSelection : SKScene
+@interface LevelSelection : SKScene <TPButtonDelegate>
+
 
 @end
