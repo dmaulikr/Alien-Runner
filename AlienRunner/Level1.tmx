@@ -1,37 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="10" tilewidth="64" tileheight="64" nextobjectid="4">
- <tileset firstgid="1" name="caveAtlas" tilewidth="64" tileheight="64" tilecount="4" columns="2">
-  <image source="caveAtlas.png" width="134" height="134"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="64" tileheight="64" nextobjectid="15">
+ <tileset firstgid="1" name="cobbleset-64_0" tilewidth="64" tileheight="64" tilecount="64" columns="8">
+  <image source="cobbleset-64_0.png" width="512" height="512"/>
  </tileset>
- <layer name="Tile Layer 1" width="30" height="10">
-  <data encoding="csv">
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-</data>
+ <layer name="Laeyer 1" width="32" height="16" offsetx="-4" offsety="-1">
+  <data encoding="base64" compression="zlib">
+   eJzjZ2Bg4EfCKkiYfxSP4lE8ikfxKB7FwxIDAD46HkA=
+  </data>
  </layer>
- <layer name="Main" width="30" height="10">
-  <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0
-</data>
+ <layer name="Main" width="32" height="16">
+  <data encoding="base64" compression="zlib">
+   eJzTYGBg0BgAzAWlhypgRMLUAipQjM5HFyfWXTB9yGxOJLVcFLqXUkDIflzhAQKMWDCpgBGNTchMQnYghzMyH5c+YuOUVmAw2I8rjWshYS4kjC0vIKdtECY2PQwG/w82+0Fi6OFNrtnIcYLLrpEOsOUBZAwKOy4yMCFzYWoATxAOJA==
+  </data>
  </layer>
  <objectgroup name="Markers">
-  <object id="1" name="Player" x="65" y="516" width="62" height="59"/>
+  <object id="14" name="Player" x="64" y="678.667" width="24" height="25.3333"/>
  </objectgroup>
+ <layer name="Obstacles" width="32" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGASFgTaL4YAcAYlgAdw==
+  </data>
+ </layer>
+ <layer name="Background" width="32" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBj+gHWA7YbhUTAK6AlG0z11wWh4joLhBgALHwA9
+  </data>
+ </layer>
 </map>

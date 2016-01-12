@@ -9,7 +9,7 @@
 #import "Player.h"
 
 static const CGFloat kGravity = -0.24;
-static const BOOL kShowCollisionRect = YES;
+static const BOOL kShowCollisionRect = NO;
 static const CGFloat kAcceleration = 0.07;
 static const CGFloat kMaxSpeed = 3.5;
 static const CGFloat kJumpSpeed = 9.5;
@@ -105,9 +105,30 @@ static const CGFloat kJumpCutOffSpeed = 3.5;
     self.velocity = CGVectorMake(self.velocity.dx, self.velocity.dy + kGravity * self.gravityMultiplier);
    
     if (self.state != Hurt) {
-        // Apply acceleration.
-        self.velocity = CGVectorMake(fminf(kMaxSpeed, self.velocity.dx + kAcceleration), self.velocity.dy);
         
+        // Apply acceleration.
+        //self.velocity = CGVectorMake(fminf(kMaxSpeed, self.velocity.dx + kAcceleration), self.velocity.dy);
+        
+        // Apply acceleration.
+        if (self.moveRight) {
+             self.xScale = 1;
+            self.velocity = CGVectorMake(fminf(kMaxSpeed, self.velocity.dx + kAcceleration), self.velocity.dy);
+        } else if(self.velocity.dx > 0) {
+            self.velocity = CGVectorMake(fmaxf(0, self.velocity.dx - (kAcceleration * 2)), self.velocity.dy);
+        }
+        if (self.moveLeft) {
+             self.xScale = -1;
+            self.velocity = CGVectorMake(fmaxf(-kMaxSpeed, self.velocity.dx - kAcceleration), self.velocity.dy);
+        } else if (self.velocity.dx < 0) {
+            self.velocity = CGVectorMake(fminf(0, self.velocity.dx + (kAcceleration * 2)), self.velocity.dy);
+        }
+        if (self.state == Running) {
+            if (self.velocity.dx == 0) {
+                [self actionForKey:@"Run"].speed = 0;
+            } else {
+                [self actionForKey:@"Run"].speed = 1;
+            }
+        }
         // Prevent ability to flip gravity when player lands on the ground.
         if (self.onGround) {
             self.canFlipGravity = NO;
@@ -124,8 +145,14 @@ static const CGFloat kJumpCutOffSpeed = 3.5;
                 // Set ability to flip gravity.
                 self.canFlipGravity = YES;
             } else if (self.canFlipGravity) {
+                
                 // Flip gravity.
-                self.gravityMultiplier *= -1;
+                //self.gravityMultiplier *= -1;
+                
+                // Perform jump. ->
+                self.velocity = CGVectorMake(self.velocity.dx, kJumpSpeed * self.gravityMultiplier);
+                // ->
+                
                 // Prevent further flips until next jump.
                 self.canFlipGravity = NO;
             }

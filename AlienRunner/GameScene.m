@@ -19,6 +19,7 @@
 @property (nonatomic) SKNode *cameraTest;
 @property (nonatomic) Player *player;
 @property (nonatomic) TMXLayer *obstacleLayer;
+@property (nonatomic) TMXLayer *backgroundLayer;
 
 @end
 
@@ -31,14 +32,18 @@
         /* Setup your scene here */
         self.backgroundColor = [SKColor colorWithRed:0.81 green:0.91 blue:0.96 alpha:1.0];
         
+        // Get selected level.
+        NSInteger selectedLevel = [[NSUserDefaults standardUserDefaults] integerForKey:kARSelectedLevel];
+        NSString *levelName = [NSString stringWithFormat:@"Level%d.tmx", (int)selectedLevel];
+        
         // Load level.
-        self.map = [JSTileMap mapNamed:@"Level2.tmx"];
+        self.map = [JSTileMap mapNamed:levelName];
         self.mainLayer = [self.map layerNamed:@"Main"];
         self.obstacleLayer = [self.map layerNamed:@"Obstacles"];
+        self.backgroundLayer = [self.map layerNamed:@"Background"];
         [self addChild:self.map];
         
         // Setup camera.
-        //self.cameraTest = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(5, 5)];
         self.cameraTest = [SKNode node];
         self.cameraTest.position = CGPointMake(size.width * 0.5, size.height * 0.5);
         [self.map addChild:self.cameraTest];
@@ -58,44 +63,51 @@
     
 }
 
+-(void)touchStateChanged:(CGPoint)location buttonState:(BOOL)state
+{
+    if (location.x < 150) {
+        self.player.moveLeft = state;
+    } else if (location.x < 300) {
+        self.player.moveRight = state;
+    } else {
+        self.player.didJump = state;
+    }
+}
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-//    for (UITouch *touch in touches) {
-//        CGPoint touchLocation = [touch locationInNode:self];
-//        if (touchLocation.x < 50) {
-//            self.player.velocity = CGVectorMake(-5, self.player.velocity.dy);
-//        } else if (touchLocation.x > self.size.width - 50) {
-//            self.player.velocity = CGVectorMake(5, self.player.velocity.dy);
-//        } else {
-//            self.player.position = [touch locationInNode:self.map];
-//            self.player.velocity = CGVectorMake(0, 0);
-//        }
-//    }
-     self.player.didJump = YES;
+    for (UITouch *touch in touches) {
+        CGPoint touchLocation = [touch locationInNode:self];
+        [self touchStateChanged:touchLocation buttonState:YES];
+    }
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-//    for (UITouch *touch in touches) {
-//        CGPoint touchLocation = [touch locationInNode:self];
-//        CGPoint previousTouchLocation = [touch previousLocationInNode:self];
-//        CGPoint movement = CGPointMake(touchLocation.x - previousTouchLocation.x,
-//                                       touchLocation.y - previousTouchLocation.y);
-//       // self.cameraTest.position = CGPointMake(self.cameraTest.position.x - movement.x, self.cameraTest.position.y - movement.y);
-//        self.player.position = CGPointMake(self.player.position.x + movement.x, self.player.position.y + movement.y);
-//        [self updateView];
-//    }
+    for (UITouch *touch in touches) {
+        CGPoint prevTouchLocation = [touch  previousLocationInNode:self];
+        [self touchStateChanged:prevTouchLocation buttonState:NO];
+        CGPoint touchLocation = [touch locationInNode:self];
+        [self touchStateChanged:touchLocation buttonState:YES];
+    }
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.player.didJump = NO;
+    for (UITouch *touch in touches) {
+        CGPoint touchLocation = [touch locationInNode:self];
+        [self touchStateChanged:touchLocation buttonState:NO];
+    }
 }
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.player.didJump = NO;
+    for (UITouch *touch in touches) {
+        CGPoint touchLocation = [touch locationInNode:self];
+        [self touchStateChanged:touchLocation buttonState:NO];
+    }
 }
+
 
 -(BOOL)collide:(Player*)player withLayer:(TMXLayer*)layer resolveWithMove:(BOOL)movePlayer
 {
@@ -225,8 +237,16 @@
     CGFloat y = fmaxf(self.cameraTest.position.y, self.size.height * 0.5);
     x = fminf(x, (self.map.mapSize.width * self.map.tileSize.width) - self.size.width * 0.5);
     y = fminf(y, (self.map.mapSize.height * self.map.tileSize.height) - self.size.height * 0.5);
+    
+    // Align x and y to pixel grid.
+    x = roundf(x * 2) / 2;
+    y = roundf(y * 2) / 2;
+    
     // Center view on camera's position in the map.
     self.map.position = CGPointMake((self.size.width * 0.5) - x, (self.size.height * 0.5) - y);
+    
+    // Parallax scroll the background layer.
+    self.backgroundLayer.position = CGPointMake(self.map.position.x * -0.2, self.map.position.y * -0.2);
 }
 
 -(CGPoint)getMarkerPosition:(NSString*)markerName
@@ -259,7 +279,13 @@
         }
         [userDefaults synchronize];
     }
-    [self.view presentScene:[[MainMenuScene alloc] initWithSize:self.size]];
+    MainMenuScene *mainMenu = [[MainMenuScene alloc] initWithSize:self.size];
+    if (completedLevel) {
+        mainMenu.mode = LevelCompleted;
+    } else {
+        mainMenu.mode = LevelFailed;
+    }
+    [self.view presentScene:mainMenu];
 }
 
 @end

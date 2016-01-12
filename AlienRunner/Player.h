@@ -22,6 +22,8 @@ typedef enum : NSUInteger {
 @property (nonatomic) BOOL onGround;
 @property (nonatomic) CGFloat gravityMultiplier;
 @property (nonatomic) PlayerState state;
+@property (nonatomic) BOOL moveLeft;
+@property (nonatomic) BOOL moveRight;
 
 -(void)update;
 -(CGRect)collisionRectAtTarget;
